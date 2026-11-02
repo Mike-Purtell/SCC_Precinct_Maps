@@ -11,7 +11,7 @@ PDF_DIR = HERE / "PDFs"
 def main():
     # Precinct number is the 4 digits immediately before .pdf
     found = set()
-    for pdf in PDF_DIR.glob("*.pdf"):
+    for pdf in PDF_DIR.rglob("*.pdf"):
         m = re.search(r"(\d{4})$", pdf.stem)
         if m:
             found.add(m.group(1))

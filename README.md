@@ -10,7 +10,7 @@ Scripts and tracking data for downloading the precinct map PDFs published by the
 | `Download_PDFs.py` | Downloads the PDF for each row's `URL` into `PDFs/`. |
 | `update_download_result_2206_11_02.py` | Sets the `Downloaded` column to `OK` or `MISSING` based on what is in `PDFs/`. |
 | `Download_Precinct_Maps_Notes_2026_11_02.txt` | Working notes. |
-| `PDFs/` | Downloaded precinct maps (e.g. `pct_2001.pdf`). |
+| `PDFs/` | Downloaded precinct maps (e.g. `pct_2001.pdf`), split into subfolders `pdfs_01` to `pdfs_06` of at most 500 files each (GitHub's web UI only lists the first 1,000 files in a folder). |
 
 ## Usage
 
@@ -22,7 +22,7 @@ python -m pip install polars fastexcel openpyxl requests
 
 1. **Download the maps**: `python Download_PDFs.py`
    - Set `LIMIT` near the top of the script to a small number (e.g. `10`) to test, or `None` to download all rows.
-   - Whitespace in file names is replaced with underscores. Existing files are skipped, and responses that aren't PDFs are reported as failures.
+   - Whitespace in file names is replaced with underscores. Existing files (in any `PDFs/` subfolder) are skipped; newly downloaded files land in the `PDFs/` root and should be moved into a subfolder with room (max 500 each)., and responses that aren't PDFs are reported as failures.
 2. **Update the spreadsheet**: `python update_download_result_2206_11_02.py`
    - A precinct is `OK` if a file in `PDFs/` has that precinct number as the 4 digits just before `.pdf`; otherwise it is `MISSING`.
    - Close the Excel file first, since the script saves over it.

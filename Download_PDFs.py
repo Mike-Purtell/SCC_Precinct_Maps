@@ -23,6 +23,9 @@ def main():
     if LIMIT:
         df = df.head(LIMIT)
 
+    # PDFs are organized in subfolders (max 500 files each); skip any already present
+    existing = {p.name for p in OUT_DIR.rglob("*.pdf") if p.stat().st_size > 0}
+
     ok = failed = 0
     with requests.Session() as session:
         for row in df.iter_rows(named=True):
@@ -30,7 +33,7 @@ def main():
             name = Path(unquote(urlparse(url).path)).name or f"{row['PRECINCT']}.pdf"
             name = "_".join(name.split())
             dest = OUT_DIR / name
-            if dest.exists() and dest.stat().st_size > 0:
+            if name in existing:
                 print(f"SKIP (exists): {name}")
                 ok += 1
                 continue
